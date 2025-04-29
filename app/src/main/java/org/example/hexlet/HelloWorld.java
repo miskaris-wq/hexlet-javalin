@@ -15,6 +15,8 @@ public class HelloWorld {
             config.fileRenderer(new JavalinJte());
         });
 
+        app.get("/", ctx -> ctx.redirect("/courses"));
+
         app.get("/courses", ctx -> {
             var courses = List.of(
                     new Course(1L, "course1", "test1"),
