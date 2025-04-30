@@ -6,7 +6,9 @@ import static io.javalin.rendering.template.TemplateUtil.model;
 import org.example.hexlet.model.Course;
 import org.example.hexlet.dto.courses.CoursesPage;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HelloWorld {
     public static void main(String[] args) {
@@ -32,6 +34,13 @@ public class HelloWorld {
             // В реальном приложении здесь будет поиск в базе данных
             var course = new Course(id, "course" + id, "description for course " + id);
             ctx.render("courses/show.jte", model("course", course));
+        });
+
+        app.get("/users/{id}", ctx -> {
+            String id = ctx.pathParam("id");
+            Map<String, Object> model = new HashMap<>();
+            model.put("id", id);
+            ctx.render("users/user.jte", model);
         });
 
         app.start(7070);
