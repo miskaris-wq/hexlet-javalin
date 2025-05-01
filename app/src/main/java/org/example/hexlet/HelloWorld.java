@@ -3,12 +3,12 @@ package org.example.hexlet;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
 import static io.javalin.rendering.template.TemplateUtil.model;
+
+import org.example.hexlet.dto.courses.CourseRepository;
 import org.example.hexlet.model.Course;
 import org.example.hexlet.dto.courses.CoursesPage;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class HelloWorld {
     public static void main(String[] args) {
@@ -41,6 +41,22 @@ public class HelloWorld {
             Map<String, Object> model = new HashMap<>();
             model.put("id", id);
             ctx.render("users/user.jte", model);
+        });
+
+        app.get("/courses", ctx -> {
+            String term = ctx.queryParam("term");
+            List<Course> courses;
+
+            if (term != null && !term.isEmpty()) {
+                // Фильтрация курсов по названию и описанию
+                courses = CourseRepository.search(term);
+            } else {
+                // Все курсы, если поиск не выполнен
+                courses = CourseRepository.getEntities();
+            }
+
+            var page = new CoursesPage(courses, term);
+            ctx.render("courses/index.jte", Collections.singletonMap("page", page));
         });
 
         app.start(7070);
