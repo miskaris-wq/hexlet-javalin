@@ -19,7 +19,4 @@ public class CourseRepository {
                 .collect(Collectors.toList());
     }
 
-    public static List<Course> getEntities() {
-        return courses;
-    }
 }

@@ -4,9 +4,10 @@ import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
 import static io.javalin.rendering.template.TemplateUtil.model;
 
-import org.example.hexlet.dto.courses.CourseRepository;
+import org.example.hexlet.dto.users.UsersRepository;
 import org.example.hexlet.model.Course;
 import org.example.hexlet.dto.courses.CoursesPage;
+import org.example.hexlet.model.User;
 
 import java.util.*;
 
@@ -36,27 +37,28 @@ public class HelloWorld {
             ctx.render("courses/show.jte", model("course", course));
         });
 
-        app.get("/users/{id}", ctx -> {
+        /*app.get("/users/{id}", ctx -> {
             String id = ctx.pathParam("id");
             Map<String, Object> model = new HashMap<>();
             model.put("id", id);
             ctx.render("users/user.jte", model);
         });
 
-        app.get("/courses", ctx -> {
-            String term = ctx.queryParam("term");
-            List<Course> courses;
+         */
+        app.post("/users", ctx -> {
+            var name = ctx.formParam("name").trim();
+            var email = ctx.formParam("email").trim().toLowerCase();
+            var password = ctx.formParam("password");
+            var passwordConfirmation = ctx.formParam("passwordConfirmation");
 
-            if (term != null && !term.isEmpty()) {
-                // Фильтрация курсов по названию и описанию
-                courses = CourseRepository.search(term);
-            } else {
-                // Все курсы, если поиск не выполнен
-                courses = CourseRepository.getEntities();
-            }
+            var user = new User(name, email, password);
+            UsersRepository.save(user);
+            ctx.redirect("/users");
+        });
 
-            var page = new CoursesPage(courses, term);
-            ctx.render("courses/index.jte", Collections.singletonMap("page", page));
+
+        app.get("/users/build", ctx -> {
+            ctx.render("users/build.jte");
         });
 
         app.start(7070);
