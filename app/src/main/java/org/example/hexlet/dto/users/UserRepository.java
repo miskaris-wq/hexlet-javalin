@@ -5,7 +5,7 @@ import org.example.hexlet.model.User;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsersRepository {
+public class UserRepository {
     private static List<User> users = new ArrayList<>();
 
 
