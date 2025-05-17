@@ -5,8 +5,9 @@ import io.javalin.rendering.template.JavalinJte;
 import static io.javalin.rendering.template.TemplateUtil.model;
 
 import io.javalin.validation.ValidationException;
+import org.example.hexlet.controller.UsersController;
 import org.example.hexlet.dto.users.BuildUserPage;
-import org.example.hexlet.dto.users.UserRepository;
+import org.example.hexlet.repository.UserRepository;
 import org.example.hexlet.model.Course;
 import org.example.hexlet.dto.courses.CoursesPage;
 import org.example.hexlet.model.User;
@@ -69,6 +70,14 @@ public class HelloWorld {
             var page = new BuildUserPage();
             ctx.render("users/build.jte", model("page", page));
         });
+
+        app.get("/users", UsersController::index);
+        app.get("/users/build", UsersController::build);
+        app.get("/users/{id}", UsersController::show);
+        app.post("/users", UsersController::create);
+        app.get("/users/{id}/edit", UsersController::edit);
+        app.patch("/users/{id}", UsersController::update);
+        app.delete("/users/{id}", UsersController::destroy);
 
         app.start(7070);
     }
